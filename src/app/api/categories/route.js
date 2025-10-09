@@ -1,18 +1,26 @@
 
 import { NextResponse } from 'next/server';
-
-const categories = [
-  { id: 1, name: 'Electronics' },
-  { id: 2, name: 'Books' },
-];
+import prisma from '@/lib/prisma';
 
 export async function GET() {
-  return NextResponse.json(categories);
+  try {
+    const categories = await prisma.category.findMany();
+    return NextResponse.json(categories);
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return NextResponse.json({ error: 'Error fetching categories' }, { status: 500 });
+  }
 }
 
 export async function POST(request) {
-  const { name } = await request.json();
-  const newCategory = { id: categories.length + 1, name };
-  categories.push(newCategory);
-  return NextResponse.json(newCategory, { status: 201 });
+  try {
+    const { name } = await request.json();
+    const newCategory = await prisma.category.create({
+      data: { name },
+    });
+    return NextResponse.json(newCategory, { status: 201 });
+  } catch (error) {
+    console.error("Error creating category:", error);
+    return NextResponse.json({ error: 'Error creating category' }, { status: 500 });
+  }
 }
