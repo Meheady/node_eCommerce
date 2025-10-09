@@ -1,4 +1,4 @@
-// File: D:\node project\node_eCommerce\src\app\admin\categories\page.jsx
+// File: /home/meheady/projects/node_ecommerce/src/app/admin/categories/page.jsx
 import * as entry from '../../../../../src/app/admin/categories/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

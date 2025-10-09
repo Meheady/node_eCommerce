@@ -1,6 +1,8 @@
 
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 export async function GET() {
   try {
@@ -14,10 +16,27 @@ export async function GET() {
 
 export async function POST(request) {
   try {
-    const { name } = await request.json();
+    const data = await request.formData();
+    const name = data.get('name');
+    const file = data.get('image');
+
+    if (!file) {
+      return NextResponse.json({ error: "No image provided" }, { status: 400 });
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const filename = `${Date.now()}-${file.name}`;
+    const path = join(process.cwd(), 'public/uploads', filename);
+    await writeFile(path, buffer);
+
     const newCategory = await prisma.category.create({
-      data: { name },
+      data: {
+        name,
+        image: `/uploads/${filename}`,
+      },
     });
+
     return NextResponse.json(newCategory, { status: 201 });
   } catch (error) {
     console.error("Error creating category:", error);

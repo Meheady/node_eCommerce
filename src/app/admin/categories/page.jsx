@@ -1,121 +1,158 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Table, Button, Modal, Form, Image, Alert } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
-  const [name, setName] = useState('');
   const [editingCategory, setEditingCategory] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [feedback, setFeedback] = useState({ type: '', message: '' });
+  const router = useRouter();
 
   useEffect(() => {
-    fetch('/api/categories')
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        if (!res.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
   }, []);
-
-  const handleCreate = async (e) => {
-    e.preventDefault();
-    const res = await fetch('/api/categories', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
-    });
-    const newCategory = await res.json();
-    setCategories([...categories, newCategory]);
-    setName('');
-  };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const res = await fetch(`/api/categories/${editingCategory.id}`,
-      {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: editingCategory.name }),
+    const formData = new FormData();
+    formData.append('name', editingCategory.name);
+    if (editingCategory.imageFile) {
+      formData.append('image', editingCategory.imageFile);
+    }
+
+    try {
+      const res = await fetch(`/api/categories/${editingCategory.id}`,
+        {
+          method: 'PUT',
+          body: formData,
+        }
+      );
+      if (!res.ok) {
+        throw new Error('Failed to update category');
       }
-    );
-    const updatedCategory = await res.json();
-    setCategories(
-      categories.map((c) => (c.id === updatedCategory.id ? updatedCategory : c))
-    );
-    setEditingCategory(null);
+      const updatedCategory = await res.json();
+      setCategories(
+        categories.map((c) => (c.id === updatedCategory.id ? updatedCategory : c))
+      );
+      setFeedback({ type: 'success', message: 'Category updated successfully' });
+    } catch (error) {
+      setFeedback({ type: 'danger', message: error.message });
+    } finally {
+      setEditingCategory(null);
+      setShowModal(false);
+    }
   };
 
   const handleDelete = async (id) => {
-    await fetch(`/api/categories/${id}`, { method: 'DELETE' });
-    setCategories(categories.filter((c) => c.id !== id));
+    try {
+      const res = await fetch(`/api/categories/${id}`, { method: 'DELETE' });
+      if (!res.ok) {
+        throw new Error('Failed to delete category');
+      }
+      setCategories(categories.filter((c) => c.id !== id));
+      setFeedback({ type: 'success', message: 'Category deleted successfully' });
+    } catch (error) {
+      setFeedback({ type: 'danger', message: error.message });
+    }
   };
+
+  const openModal = (category = null) => {
+    setEditingCategory(category);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setEditingCategory(null);
+    setShowModal(false);
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
     <div>
-      <h2 className="text-3xl font-bold mb-4">Categories</h2>
-      <div className="mb-4">
-        <form onSubmit={handleCreate} className="bg-white p-4 rounded-md shadow-md flex items-center">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="New category name"
-            className="border p-2 mr-2 w-full rounded-md"
-          />
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
-            Create
-          </button>
-        </form>
+      {feedback.message && <Alert variant={feedback.type}>{feedback.message}</Alert>}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Categories</h2>
+        <Button variant="primary" onClick={() => router.push('/admin/categories/new')}>Create Category</Button>
       </div>
-      <div className="bg-white shadow-md rounded-md">
-        <ul className="divide-y divide-gray-200">
+      <Table striped bordered hover responsive>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
           {categories.map((category) => (
-            <li key={category.id} className="flex justify-between items-center p-4">
-              <span className="text-lg">{category.name}</span>
-              <div>
-                <button
-                  onClick={() => setEditingCategory(category)}
-                  className="bg-yellow-500 text-white p-2 rounded-md hover:bg-yellow-600 mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(category.id)}
-                  className="bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
-            </li>
+            <tr key={category.id}>
+              <td>
+                <Image src={category.image} alt={category.name} width={50} height={50} rounded />
+              </td>
+              <td>{category.name}</td>
+              <td>
+                <Button variant="warning" onClick={() => openModal(category)} className="me-2">Edit</Button>
+                <Button variant="danger" onClick={() => handleDelete(category.id)}>Delete</Button>
+              </td>
+            </tr>
           ))}
-        </ul>
-      </div>
+        </tbody>
+      </Table>
 
-      {editingCategory && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-md shadow-md w-full max-w-md">
-            <h3 className="text-2xl font-bold mb-4">Edit Category</h3>
-            <form onSubmit={handleUpdate}>
-              <input
-                type="text"
-                value={editingCategory.name}
-                onChange={(e) =>
-                  setEditingCategory({ ...editingCategory, name: e.target.value })
-                }
-                className="border p-2 mb-4 w-full rounded-md"
-              />
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setEditingCategory(null)}
-                  className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 mr-2"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">
-                  Update
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Category</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {editingCategory && (
+            <Form onSubmit={handleUpdate}>
+              <Form.Group>
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={editingCategory.name}
+                  onChange={(e) =>
+                    setEditingCategory({ ...editingCategory, name: e.target.value })
+                  }
+                  placeholder="Enter category name"
+                />
+              </Form.Group>
+              <Form.Group className="mt-3">
+                <Form.Label>Image</Form.Label>
+                <Form.Control
+                  type="file"
+                  onChange={(e) =>
+                    setEditingCategory({ ...editingCategory, imageFile: e.target.files[0] })
+                  }
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit" className="mt-3">
+                Update
+              </Button>
+            </Form>
+          )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
