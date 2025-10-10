@@ -1,37 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../../api/auth/[...nextauth]/route"; // Adjust path as needed
-import multer from 'multer';
-import path from 'path';
-import fs from 'fs/promises';
-
-// Ensure the uploads directory exists
-const uploadDir = path.join(process.cwd(), 'public/uploads');
-fs.mkdir(uploadDir, { recursive: true }).catch(console.error);
-
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Helper to run Multer middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
-}
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
@@ -41,19 +12,20 @@ export async function POST(request) {
   }
 
   try {
-    // Convert Next.js Request to Node.js compatible request for Multer
-    const req = request.clone();
-    const res = new NextResponse(); // Dummy response object for Multer
+    const data = await request.formData();
+    const file = data.get('logo');
 
-    await runMiddleware(req, res, upload.single('logo'));
+    if (file && file.size > 0) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const filename = `${Date.now()}-${file.name}`;
+      const path = join(process.cwd(), 'public/uploads', filename);
+      await writeFile(path, buffer);
 
-    // Access file from req.file after Multer processes it
-    const file = req.file;
+      const logoPath = `/uploads/${filename}`;
+      // Here you would typically save the logoPath to your database
+      // For example: await prisma.setting.update({ where: { key: 'logo' }, data: { value: logoPath } });
 
-    if (file) {
-      // Save logo path to database or configuration (e.g., a new Setting model)
-      // For now, just return the path
-      const logoPath = `/uploads/${file.filename}`;
       return NextResponse.json({ message: 'Logo uploaded successfully', logoPath }, { status: 200 });
     } else {
       return new NextResponse(JSON.stringify({ message: 'No file uploaded' }), { status: 400 });
