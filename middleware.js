@@ -1,20 +1,25 @@
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
 
-export default withAuth(
-  function middleware(req) {
+export async function middleware(req) {
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-    if (req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== "ADMIN") {
-      return NextResponse.rewrite(new URL("/login", req.url));
+  const { pathname } = req.nextUrl;
+
+  // If the user is trying to access the admin panel
+  if (pathname.startsWith('/admin')) {
+    // If the user is not an admin or is not logged in, redirect to login
+    if (!token || token.role !== 'ADMIN') {
+      const url = req.nextUrl.clone();
+      url.pathname = '/login/admin';
+      return NextResponse.redirect(url);
     }
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
   }
-);
+
+  // Allow the request to continue
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ['/admin/:path*'],
 };

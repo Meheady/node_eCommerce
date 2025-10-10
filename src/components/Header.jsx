@@ -23,7 +23,7 @@ const Header = () => {
                     >
                         <NavDropdown.Item as={Link} href="/admin/profile">Profile</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={() => signOut({ callbackUrl: '/login' })}>Logout</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => signOut({ callbackUrl: '/login/admin' })}>Logout</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
             </div>
