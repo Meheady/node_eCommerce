@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Form, Button, Card, Alert, Table, Modal } from 'react-bootstrap';
 import { useSession } from 'next-auth/react';
+import bcrypt from 'bcryptjs';
 
 export default function ManageAdminsPage() {
   const { data: session } = useSession();
@@ -77,9 +78,10 @@ export default function ManageAdminsPage() {
     }
   };
 
-  // if (session?.user?.role !== 'ADMIN') {
-  //   return <Alert variant="danger">Access Denied: You must be an administrator to view this page.</Alert>;
-  // }
+
+  if (session?.user?.role !== 'ADMIN') {
+    return <Alert variant="danger">Access Denied: You must be an administrator to view this page.</Alert>;
+  }
 
   return (
     <Container>

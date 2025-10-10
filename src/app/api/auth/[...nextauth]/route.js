@@ -1,35 +1,36 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-const handler = NextAuth({
+export const authOptions = { // 👈 export it here
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials) {
-          return null;
-        }
+        if (!credentials) return null;
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+          where: { email: credentials.email },
         });
 
-        //if (user && bcrypt.compareSync(credentials.password, user.password)) {
-        if (user && credentials.password == user.password) {
-          return { id: user.id, name: user.name, email: user.email, role: user.role };
-        } else {
-          return null;
+        if (user && bcrypt.compareSync(credentials.password, user.password)) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
         }
-      }
-    })
+        return null;
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -45,15 +46,19 @@ const handler = NextAuth({
         session.user.role = token.role;
       }
       return session;
-    }
+    },
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
 
+// Create handler
+const handler = NextAuth(authOptions);
+
+// Export NextAuth route handlers
 export { handler as GET, handler as POST };
