@@ -13,7 +13,7 @@ const Header = () => {
             <div className="d-flex justify-content-end">
                 <Nav>
                     <NavDropdown
-                        title={<PersonCircle size={28} color={isHovered ? '#007bff' : '#212529'} />}
+                        title={<PersonCircle size={28} color={isHovered ? '#0056b3' : '#343a40'} />}
                         id="basic-nav-dropdown"
                         align="end"
                         className="me-3 no-arrow"
