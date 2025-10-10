@@ -1,6 +1,6 @@
-
-import Navbar from '../components/Navbar';
 import '../../public/globals.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ConditionalHeaderFooter from "@/components/ConditionalHeaderFooter";
 
 export const metadata = {
   title: 'E-commerce App',
@@ -11,8 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <main>{children}</main>
+        <ConditionalHeaderFooter>
+          <main>{children}</main>
+        </ConditionalHeaderFooter>
       </body>
     </html>
   );

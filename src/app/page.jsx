@@ -1,48 +1,72 @@
-
 "use client";
 
-import { useState, useEffect } from 'react';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HomePage() {
-  const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
-
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="py-6">
-        <h1 className="text-4xl font-bold text-center mb-8">Our Products</h1>
-        <div className="mb-8">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-3 border rounded"
-          />
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>
-              <div className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
-                <h2 className="text-xl font-bold">{product.name}</h2>
-                <p className="text-gray-500">{product.description}</p>
-                <p className="text-lg font-semibold mt-2">${product.price}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+    <>
+      {/* Hero Section */}
+      <div className="bg-light p-5 text-center mb-4">
+        <Container>
+          <h1 className="display-4">Welcome to Our E-commerce Store!</h1>
+          <p className="lead">Discover amazing products at unbeatable prices.</p>
+          <Button variant="primary" size="lg" as={Link} href="/products">Shop Now</Button>
+        </Container>
       </div>
-    </div>
+
+      {/* Featured Products Section */}
+      <Container className="mb-4">
+        <h2 className="text-center mb-4">Featured Products</h2>
+        <Row>
+          <Col md={4} className="mb-4">
+            <Card className="h-100">
+              <div style={{ position: 'relative', height: '200px' }}>
+                <Image src="/uploads/product-03.jpg" alt="Product 1" fill style={{ objectFit: 'cover' }} className="card-img-top" />
+              </div>
+              <Card.Body>
+                <Card.Title>Product 1</Card.Title>
+                <Card.Text>Description of product 1.</Card.Text>
+                <Button variant="primary">View Details</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4} className="mb-4">
+            <Card className="h-100">
+              <div style={{ position: 'relative', height: '200px' }}>
+                <Image src="/uploads/product-03.jpg" alt="Product 2" fill style={{ objectFit: 'cover' }} className="card-img-top" />
+              </div>
+              <Card.Body>
+                <Card.Title>Product 2</Card.Title>
+                <Card.Text>Description of product 2.</Card.Text>
+                <Button variant="primary">View Details</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4} className="mb-4">
+            <Card className="h-100">
+              <div style={{ position: 'relative', height: '200px' }}>
+                <Image src="/uploads/product-03.jpg" alt="Product 3" fill style={{ objectFit: 'cover' }} className="card-img-top" />
+              </div>
+              <Card.Body>
+                <Card.Title>Product 3</Card.Title>
+                <Card.Text>Description of product 3.</Card.Text>
+                <Button variant="primary">View Details</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+
+      {/* Call to Action Section */}
+      <div className="bg-primary text-white p-5 text-center">
+        <Container>
+          <h2>Ready to get started?</h2>
+          <p>Sign up now to receive exclusive offers and updates.</p>
+          <Button variant="light" size="lg" as={Link} href="/signup">Sign Up</Button>
+        </Container>
+      </div>
+    </>
   );
 }
