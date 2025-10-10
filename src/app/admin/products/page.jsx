@@ -45,6 +45,7 @@ export default function ProductsPage() {
     formData.append('name', editingProduct.name);
     formData.append('description', editingProduct.description);
     formData.append('price', editingProduct.price);
+    formData.append('stock', editingProduct.stock);
     formData.append('categoryId', editingProduct.categoryId);
     if (editingProduct.thumbnailFile) {
       formData.append('thumbnail', editingProduct.thumbnailFile);
@@ -115,6 +116,7 @@ export default function ProductsPage() {
             <th>Thumbnail</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Stock</th>
             <th>Category</th>
             <th>Actions</th>
           </tr>
@@ -127,6 +129,7 @@ export default function ProductsPage() {
               </td>
               <td>{product.name}</td>
               <td>{product.price}</td>
+              <td>{product.stock}</td>
               <td>{product.category?.name}</td>
               <td>
                 <Button variant="warning" onClick={() => openModal(product)} className="me-2">Edit</Button>
@@ -137,7 +140,7 @@ export default function ProductsPage() {
         </tbody>
       </Table>
 
-      <Modal show={showModal} onHide={closeModal}>
+      <Modal className="modal-xl" show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Product</Modal.Title>
         </Modal.Header>
@@ -183,7 +186,6 @@ export default function ProductsPage() {
               <Form.Group className="mt-3">
                 <Form.Label>Stock</Form.Label>
                 <Form.Control
-
                   type="number"
                   value={editingProduct.stock}
                   onChange={(e) =>

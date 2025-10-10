@@ -1,9 +1,8 @@
-
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
-import {BloomFilter as Buffer} from "next/dist/shared/lib/bloom-filter";
+
 
 export async function GET(request, { params }) {
   try {
@@ -28,7 +27,7 @@ export async function PUT(request, { params }) {
     const file = data.get('image');
 
     let image;
-    if (file) {
+    if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const filename = `${Date.now()}-${file.name}`;

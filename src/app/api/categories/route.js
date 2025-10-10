@@ -22,7 +22,7 @@ export async function POST(request) {
 
     let filename = '/placeholder.jpg'
 
-    if (file) {
+    if (file && file?.size > 0){
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       filename = `${Date.now()}-${file.name}`;

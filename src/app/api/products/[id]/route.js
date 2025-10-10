@@ -40,7 +40,7 @@ export async function PUT(request, { params }) {
     await mkdir(uploadDir, { recursive: true });
 
     let thumbnail;
-    if (thumbnailFile) {
+    if (thumbnailFile && thumbnailFile.size > 0) {
       const bytes = await thumbnailFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const filename = `${Date.now()}-${thumbnailFile.name}`;
@@ -53,12 +53,14 @@ export async function PUT(request, { params }) {
     let images = [];
     if (imageFiles.length > 0) {
       for (const file of imageFiles) {
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const filename = `${Date.now()}-${file.name}`;
-        const path = join(uploadDir, filename);
-        await writeFile(path, buffer);
-        images.push(`/uploads/${filename}`);
+        if (file.size > 0){
+          const bytes = await file.arrayBuffer();
+          const buffer = Buffer.from(bytes);
+          const filename = `${Date.now()}-${file.name}`;
+          const path = join(uploadDir, filename);
+          await writeFile(path, buffer);
+          images.push(`/uploads/${filename}`);
+        }
       }
       console.log("Images uploaded:", images);
     }
@@ -70,7 +72,7 @@ export async function PUT(request, { params }) {
           name,
           description,
           price: parseFloat(price),
-          stock,
+          stock: stock ?? 0,
           categoryId: parseInt(categoryId),
           ...(thumbnail && { thumbnail }),
           ...(images.length > 0 && { images: images.join(',') }),
