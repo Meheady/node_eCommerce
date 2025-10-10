@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,17 +15,17 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+    const result = await signIn('credentials', {
+      redirect: false,
+      email,
+      password,
     });
 
-    if (res.ok) {
-      router.push('/admin');
+    if (result.error) {
+      setError(result.error);
     } else {
-      const data = await res.json();
-      setError(data.error || 'Login failed');
+      // Redirect based on user role (this will be handled by middleware or session check)
+      router.push('/admin'); // Default redirect for now, will be refined later
     }
   };
 

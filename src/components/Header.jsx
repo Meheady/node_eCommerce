@@ -4,6 +4,7 @@ import { Nav, NavDropdown } from 'react-bootstrap';
 import { PersonCircle } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from "next/link";
+import { signOut } from 'next-auth/react';
 
 const Header = () => {
     const [isHovered, setIsHovered] = React.useState(false);
@@ -22,7 +23,7 @@ const Header = () => {
                     >
                         <NavDropdown.Item as={Link} href="/admin/profile">Profile</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="/logout">Logout</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => signOut({ callbackUrl: '/login' })}>Logout</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
             </div>

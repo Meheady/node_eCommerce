@@ -33,7 +33,16 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
-  image     String
+  image     String?
+  role      String   @default("CUSTOMER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

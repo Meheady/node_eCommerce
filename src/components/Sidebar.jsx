@@ -2,7 +2,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import { House, BoxSeam, List, ChevronDown, ChevronRight } from 'react-bootstrap-icons';
+import { House, BoxSeam, List, ChevronDown, ChevronRight, Gear } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from "next/link";
 
@@ -89,18 +89,48 @@ const Sidebar = () => {
                         <div style={submenuStyle}>
                             <Nav.Link
                                 as={Link}
-                                href="/admin/products"
+                                href="/admin/admin/products"
                                 style={hoveredLink === 'products-all' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
                                 onMouseEnter={() => setHoveredLink('products-all')}
                                 onMouseLeave={() => setHoveredLink(null)}
                             >All</Nav.Link>
                             <Nav.Link
                                 as={Link}
-                                href="/admin/products/new"
+                                href="/admin/admin/products/new"
                                 style={hoveredLink === 'products-new' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
                                 onMouseEnter={() => setHoveredLink('products-new')}
                                 onMouseLeave={() => setHoveredLink(null)}
                             >Add New</Nav.Link>
+                        </div>
+                    )}
+                </div>
+
+                <div>
+                    <Nav.Link
+                        onClick={() => handleSubmenuClick('settings')}
+                        style={hoveredLink === 'settings' ? { ...navLinkStyle, ...navLinkHoverStyle } : navLinkStyle}
+                        onMouseEnter={() => setHoveredLink('settings')}
+                        onMouseLeave={() => setHoveredLink(null)}
+                    >
+                        <Gear size={20} /> {!isCollapsed && <span style={navLinkTextStyle}>Settings</span>}
+                        {!isCollapsed && (openSubmenu === 'settings' ? <ChevronDown style={submenuIconStyle} /> : <ChevronRight style={submenuIconStyle} />)}
+                    </Nav.Link>
+                    {!isCollapsed && openSubmenu === 'settings' && (
+                        <div style={submenuStyle}>
+                            <Nav.Link
+                                as={Link}
+                                href="/admin/admin/settings/website"
+                                style={hoveredLink === 'settings-website' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
+                                onMouseEnter={() => setHoveredLink('settings-website')}
+                                onMouseLeave={() => setHoveredLink(null)}
+                            >Website Settings</Nav.Link>
+                            <Nav.Link
+                                as={Link}
+                                href="/admin/admin/settings/admins"
+                                style={hoveredLink === 'settings-admins' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
+                                onMouseEnter={() => setHoveredLink('settings-admins')}
+                                onMouseLeave={() => setHoveredLink(null)}
+                            >Manage Admins</Nav.Link>
                         </div>
                     )}
                 </div>
