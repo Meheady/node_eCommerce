@@ -1,0 +1,7 @@
+.no-arrow::after {
+    display: none;
+}
+
+.no-arrow {
+    cursor: pointer;
+}
