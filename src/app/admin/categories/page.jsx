@@ -129,6 +129,7 @@ export default function CategoriesPage() {
               <Form.Group>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
+                    required
                   type="text"
                   value={editingCategory.name}
                   onChange={(e) =>

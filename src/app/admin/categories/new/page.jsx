@@ -29,6 +29,7 @@ export default function NewCategoryPage() {
         <Form.Group>
           <Form.Label>Name</Form.Label>
           <Form.Control
+              required
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import {BloomFilter as Buffer} from "next/dist/shared/lib/bloom-filter";
 
 export async function GET(request, { params }) {
   try {

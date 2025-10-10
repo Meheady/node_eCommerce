@@ -20,20 +20,22 @@ export async function POST(request) {
     const name = data.get('name');
     const file = data.get('image');
 
-    if (!file) {
-      return NextResponse.json({ error: "No image provided" }, { status: 400 });
-    }
+    let filename = '/placeholder.jpg'
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filename = `${Date.now()}-${file.name}`;
-    const path = join(process.cwd(), 'public/uploads', filename);
-    await writeFile(path, buffer);
+    if (file) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      filename = `${Date.now()}-${file.name}`;
+      const path = join(process.cwd(), 'public/uploads', filename);
+      await writeFile(path, buffer);
+
+      filename = `/uploads/${filename}`;
+    }
 
     const newCategory = await prisma.category.create({
       data: {
         name,
-        image: `/uploads/${filename}`,
+        image: `${filename}`,
       },
     });
 

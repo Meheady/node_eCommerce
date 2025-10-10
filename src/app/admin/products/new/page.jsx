@@ -9,6 +9,7 @@ export default function NewProductPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [stock, setStock] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [thumbnail, setThumbnail] = useState(null);
   const [images, setImages] = useState([]);
@@ -26,6 +27,7 @@ export default function NewProductPage() {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('price', price);
+    formData.append('stock', stock);
     formData.append('categoryId', categoryId);
     formData.append('thumbnail', thumbnail);
     images.forEach(image => {
@@ -46,6 +48,7 @@ export default function NewProductPage() {
         <Form.Group>
           <Form.Label>Name</Form.Label>
           <Form.Control
+              required
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -65,15 +68,27 @@ export default function NewProductPage() {
         <Form.Group className="mt-3">
           <Form.Label>Price</Form.Label>
           <Form.Control
+              required
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="Enter product price"
           />
         </Form.Group>
+
+        <Form.Group className="mt-3">
+          <Form.Label>Stock</Form.Label>
+          <Form.Control
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            placeholder="Enter product stock"
+          />
+        </Form.Group>
         <Form.Group className="mt-3">
           <Form.Label>Category</Form.Label>
           <Form.Control
+              required
             as="select"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}

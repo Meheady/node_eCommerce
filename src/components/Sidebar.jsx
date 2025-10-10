@@ -89,14 +89,14 @@ const Sidebar = () => {
                         <div style={submenuStyle}>
                             <Nav.Link
                                 as={Link}
-                                href="/admin/admin/products"
+                                href="/admin/products"
                                 style={hoveredLink === 'products-all' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
                                 onMouseEnter={() => setHoveredLink('products-all')}
                                 onMouseLeave={() => setHoveredLink(null)}
                             >All</Nav.Link>
                             <Nav.Link
                                 as={Link}
-                                href="/admin/admin/products/new"
+                                href="/admin/products/new"
                                 style={hoveredLink === 'products-new' ? { ...submenuLinkStyle, ...navLinkHoverStyle } : submenuLinkStyle}
                                 onMouseEnter={() => setHoveredLink('products-new')}
                                 onMouseLeave={() => setHoveredLink(null)}

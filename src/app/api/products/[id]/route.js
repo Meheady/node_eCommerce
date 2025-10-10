@@ -29,6 +29,7 @@ export async function PUT(request, { params }) {
     const name = data.get('name');
     const description = data.get('description');
     const price = data.get('price');
+    const stock = data.get('stock');
     const categoryId = data.get('categoryId');
     const thumbnailFile = data.get('thumbnail');
     const imageFiles = data.getAll('images');
@@ -69,6 +70,7 @@ export async function PUT(request, { params }) {
           name,
           description,
           price: parseFloat(price),
+          stock,
           categoryId: parseInt(categoryId),
           ...(thumbnail && { thumbnail }),
           ...(images.length > 0 && { images: images.join(',') }),

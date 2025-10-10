@@ -147,6 +147,7 @@ export default function ProductsPage() {
               <Form.Group>
                 <Form.Label>Name</Form.Label>
                 <Form.Control
+                    required
                   type="text"
                   value={editingProduct.name}
                   onChange={(e) =>
@@ -170,6 +171,7 @@ export default function ProductsPage() {
               <Form.Group className="mt-3">
                 <Form.Label>Price</Form.Label>
                 <Form.Control
+                    required
                   type="number"
                   value={editingProduct.price}
                   onChange={(e) =>
@@ -179,8 +181,21 @@ export default function ProductsPage() {
                 />
               </Form.Group>
               <Form.Group className="mt-3">
+                <Form.Label>Stock</Form.Label>
+                <Form.Control
+
+                  type="number"
+                  value={editingProduct.stock}
+                  onChange={(e) =>
+                    setEditingProduct({ ...editingProduct, stock: e.target.value })
+                  }
+                  placeholder="Enter product stock"
+                />
+              </Form.Group>
+              <Form.Group className="mt-3">
                 <Form.Label>Category</Form.Label>
                 <Form.Control
+                    required
                   as="select"
                   value={editingProduct.categoryId}
                   onChange={(e) =>

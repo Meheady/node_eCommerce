@@ -21,16 +21,15 @@ export async function GET() {
 export async function POST(request) {
   try {
     const data = await request.formData();
-    console.log("Form data received:", data);
 
     const name = data.get('name');
     const description = data.get('description');
     const price = data.get('price');
+    const stock = data.get('stock');
     const categoryId = data.get('categoryId');
     const thumbnailFile = data.get('thumbnail');
     const imageFiles = data.getAll('images');
 
-    console.log("Fields:", { name, description, price, categoryId });
 
     const uploadDir = join(process.cwd(), 'public/uploads');
     await mkdir(uploadDir, { recursive: true });
@@ -43,7 +42,8 @@ export async function POST(request) {
       const path = join(uploadDir, filename);
       await writeFile(path, buffer);
       thumbnail = `/uploads/${filename}`;
-      console.log("Thumbnail uploaded:", thumbnail);
+    } else {
+      thumbnail = '/placeholder.jpg';
     }
 
     let images = [];
@@ -56,7 +56,8 @@ export async function POST(request) {
         await writeFile(path, buffer);
         images.push(`/uploads/${filename}`);
       }
-      console.log("Images uploaded:", images);
+    } else{
+      images = ['/placeholder.jpg']
     }
 
     try {
@@ -65,12 +66,12 @@ export async function POST(request) {
           name,
           description,
           price: parseFloat(price),
+          stock: parseFloat(stock),
           categoryId: parseInt(categoryId),
           thumbnail,
           images: images.join(','),
         },
       });
-      console.log("Product created:", newProduct);
       return NextResponse.json(newProduct, { status: 201 });
     } catch (prismaError) {
       console.error("Prisma error:", prismaError);
