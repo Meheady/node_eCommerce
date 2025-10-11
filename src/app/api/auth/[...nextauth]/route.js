@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-export const authOptions = { // 👈 export it here
+const handler = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -21,6 +21,7 @@ export const authOptions = { // 👈 export it here
         });
 
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
+          // Return the user object without the password
           return {
             id: user.id,
             name: user.name,
@@ -28,12 +29,22 @@ export const authOptions = { // 👈 export it here
             role: user.role,
           };
         }
+        // Return null if user not found or password doesn't match
         return null;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login/admin",
+  },
   callbacks: {
     async jwt({ token, user }) {
+      // This callback is called whenever a JWT is created or updated.
+      // The `user` object is only passed on the first call after a successful login.
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -41,24 +52,15 @@ export const authOptions = { // 👈 export it here
       return token;
     },
     async session({ session, token }) {
-      if (token) {
+      // This callback is called whenever a session is checked.
+      // We are taking the role from the token and adding it to the session object.
+      if (token && session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
       }
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-};
+});
 
-// Create handler
-const handler = NextAuth(authOptions);
-
-// Export NextAuth route handlers
 export { handler as GET, handler as POST };
