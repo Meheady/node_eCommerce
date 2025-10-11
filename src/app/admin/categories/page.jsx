@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Image, Alert } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Image, Alert, FormControl } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
 export default function CategoriesPage() {
@@ -11,12 +11,13 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
+  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
+        const res = await fetch(`/api/categories?search=${searchQuery}`);
         if (!res.ok) {
           throw new Error('Failed to fetch categories');
         }
@@ -29,7 +30,7 @@ export default function CategoriesPage() {
       }
     };
     fetchCategories();
-  }, []);
+  }, [searchQuery]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -95,6 +96,14 @@ export default function CategoriesPage() {
         <h2>Categories</h2>
         <Button variant="primary" onClick={() => router.push('/admin/categories/new')}>Create Category</Button>
       </div>
+      <Form.Group className="mb-3">
+        <FormControl
+          type="text"
+          placeholder="Search categories..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Form.Group>
       <Table striped bordered hover responsive>
         <thead>
           <tr>

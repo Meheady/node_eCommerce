@@ -1,13 +1,21 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'fs/promises';
 import sharp from 'sharp';
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const search = searchParams.get('search');
+
   try {
     const products = await prisma.product.findMany({
+      where: {
+        name: {
+          contains: search || '',
+        },
+      },
       include: {
         category: true,
       },

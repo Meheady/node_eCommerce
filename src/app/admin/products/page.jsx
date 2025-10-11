@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Image, Alert } from 'react-bootstrap';
+import { Table, Button, Modal, Form, Image, Alert, FormControl } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 
 export default function ProductsPage() {
@@ -12,13 +12,14 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
+  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
-          fetch('/api/products'),
+          fetch(`/api/products?search=${searchQuery}`),
           fetch('/api/categories'),
         ]);
         if (!productsRes.ok || !categoriesRes.ok) {
@@ -37,7 +38,7 @@ export default function ProductsPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [searchQuery]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -98,7 +99,7 @@ export default function ProductsPage() {
   const closeModal = () => {
     setEditingProduct(null);
     setShowModal(false);
-  };
+};
 
   if (loading) return <div>Loading...</div>;
   if (error) return <Alert variant="danger">{error}</Alert>;
@@ -110,6 +111,14 @@ export default function ProductsPage() {
         <h2>Products</h2>
         <Button variant="primary" onClick={() => router.push('/admin/products/new')}>Create Product</Button>
       </div>
+      <Form.Group className="mb-3">
+        <FormControl
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Form.Group>
       <Table striped bordered hover responsive>
         <thead>
           <tr>

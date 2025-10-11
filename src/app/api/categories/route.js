@@ -1,13 +1,22 @@
 
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import sharp from 'sharp';
 
-export async function GET() {
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const search = searchParams.get('search');
+
   try {
-    const categories = await prisma.category.findMany();
+    const categories = await prisma.category.findMany({
+      where: {
+        name: {
+          contains: search || '',
+        },
+      },
+    });
     return NextResponse.json(categories);
   } catch (error) {
     console.error("Error fetching categories:", error);
