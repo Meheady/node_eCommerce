@@ -80,6 +80,7 @@ export default function NewProductPage() {
           <Form.Label>Stock</Form.Label>
           <Form.Control
             type="number"
+            required
             value={stock}
             onChange={(e) => setStock(e.target.value)}
             placeholder="Enter product stock"
@@ -104,7 +105,7 @@ export default function NewProductPage() {
             onChange={(e) => setThumbnail(e.target.files[0])}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3 d-none">
           <Form.Label>Images</Form.Label>
           <Form.Control
             type="file"

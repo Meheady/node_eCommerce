@@ -195,6 +195,7 @@ export default function ProductsPage() {
               <Form.Group className="mt-3">
                 <Form.Label>Stock</Form.Label>
                 <Form.Control
+                    required
                   type="number"
                   value={editingProduct.stock}
                   onChange={(e) =>
@@ -226,7 +227,7 @@ export default function ProductsPage() {
                   }
                 />
               </Form.Group>
-              <Form.Group className="mt-3">
+              <Form.Group className="mt-3 d-none">
                 <Form.Label>Images</Form.Label>
                 <Form.Control
                   type="file"

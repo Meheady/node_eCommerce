@@ -1,0 +1,18 @@
+{
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "MB TECH",
+  "short_name": "MB TECH",
+  "description": "MB Tech Price Listing",
+  "icons": [
+    {
+      "src": "/pwa-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

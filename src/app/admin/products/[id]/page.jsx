@@ -93,6 +93,7 @@ export default function EditProductPage() {
         <Form.Group className="mt-3">
           <Form.Label>Stock</Form.Label>
           <Form.Control
+              required
             type="number"
             value={stock}
             onChange={(e) => setStock(e.target.value)}
@@ -118,7 +119,7 @@ export default function EditProductPage() {
             onChange={(e) => setThumbnail(e.target.files[0])}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3 d-none">
           <Form.Label>Images</Form.Label>
           <Form.Control
             type="file"
