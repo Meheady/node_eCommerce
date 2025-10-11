@@ -29,17 +29,4 @@ export default function RootLayout({ children }) {
     );
 }
 
-// export default function RootLayout({ children }) {
-//   return (
-//     <html lang="en">
-//       <body>
-//         <ConditionalHeaderFooter>
-//           <main>{children}</main>
-//         </ConditionalHeaderFooter>
-//       </body>
-//     </html>
-//   );
-// }
-
-
 
