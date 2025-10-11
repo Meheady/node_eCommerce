@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'fs/promises';
 import sharp from 'sharp';
@@ -34,11 +34,24 @@ export async function PUT(request, { params }) {
     const thumbnailFile = data.get('thumbnail');
     const imageFiles = data.getAll('images');
 
+    const existingProduct = await prisma.product.findUnique({
+      where: { id: parseInt(params.id) },
+    });
+
     const uploadDir = join(process.cwd(), 'public/uploads');
     await mkdir(uploadDir, { recursive: true });
 
     let thumbnail;
     if (thumbnailFile && thumbnailFile.size > 0) {
+      if (existingProduct && existingProduct.thumbnail && existingProduct.thumbnail !== '/placeholder.jpg') {
+        const oldThumbnailPath = join(process.cwd(), 'public', existingProduct.thumbnail);
+        try {
+          await unlink(oldThumbnailPath);
+        } catch (error) {
+          console.error("Error deleting old thumbnail:", error);
+        }
+      }
+
       const bytes = await thumbnailFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const filename = `${Date.now()}-${thumbnailFile.name.split('.').slice(0, -1).join('.')}.webp`;
@@ -52,7 +65,21 @@ export async function PUT(request, { params }) {
     }
 
     let images = [];
-    if (imageFiles.length > 0) {
+    if (imageFiles.length > 0 && imageFiles[0].size > 0) {
+      if (existingProduct && existingProduct.images) {
+        const oldImages = existingProduct.images.split(',');
+        for (const oldImage of oldImages) {
+          if (oldImage !== '/placeholder.jpg') {
+            const oldImagePath = join(process.cwd(), 'public', oldImage);
+            try {
+              await unlink(oldImagePath);
+            } catch (error) {
+              console.error("Error deleting old image:", error);
+            }
+          }
+        }
+      }
+
       for (const file of imageFiles) {
         if (file.size > 0){
           const bytes = await file.arrayBuffer();
@@ -96,6 +123,35 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
+    const product = await prisma.product.findUnique({
+      where: { id: parseInt(params.id) },
+    });
+
+    if (product) {
+      if (product.thumbnail && product.thumbnail !== '/placeholder.jpg') {
+        const thumbnailPath = join(process.cwd(), 'public', product.thumbnail);
+        try {
+          await unlink(thumbnailPath);
+        } catch (error) {
+          console.error("Error deleting thumbnail:", error);
+        }
+      }
+
+      if (product.images) {
+        const images = product.images.split(',');
+        for (const image of images) {
+          if (image !== '/placeholder.jpg') {
+            const imagePath = join(process.cwd(), 'public', image);
+            try {
+              await unlink(imagePath);
+            } catch (error) {
+              console.error("Error deleting image:", error);
+            }
+          }
+        }
+      }
+    }
+
     await prisma.product.delete({
       where: { id: parseInt(params.id) },
     });

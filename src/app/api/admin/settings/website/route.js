@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Adjust path as needed
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import sharp from 'sharp';
 
@@ -20,6 +20,21 @@ export async function POST(request) {
     const file = data.get('logo');
 
     if (file && file.size > 0) {
+      // Get the old logo path
+      const oldLogoSetting = await prisma.setting.findUnique({
+        where: { key: 'logo' },
+      });
+
+      // If there is an old logo, delete it
+      if (oldLogoSetting && oldLogoSetting.value) {
+        const oldLogoPath = join(process.cwd(), 'public', oldLogoSetting.value);
+        try {
+          await unlink(oldLogoPath);
+        } catch (error) {
+          console.error("Error deleting old logo:", error);
+        }
+      }
+
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
