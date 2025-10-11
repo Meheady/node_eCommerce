@@ -1,6 +1,8 @@
 import HomePageClient from '@/components/HomePageClient';
 import prisma from '@/lib/prisma';
 
+export const revalidate = 60;
+
 async function getHomePageData() {
   const categories = await prisma.category.findMany();
   const products = await prisma.product.findMany({
