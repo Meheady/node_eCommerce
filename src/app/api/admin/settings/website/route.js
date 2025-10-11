@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Adjust path as needed
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import sharp from 'sharp';
 
 const prisma = new PrismaClient();
 
@@ -21,9 +22,13 @@ export async function POST(request) {
     if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${file.name}`;
+
+      const filename = `${Date.now()}-${file.name.split('.').slice(0, -1).join('.')}.webp`;
       const path = join(process.cwd(), 'public/uploads', filename);
-      await writeFile(path, buffer);
+
+      await sharp(buffer)
+        .webp({ quality: 90 })
+        .toFile(path);
 
       const logoPath = `/uploads/${filename}`;
       await prisma.setting.upsert({

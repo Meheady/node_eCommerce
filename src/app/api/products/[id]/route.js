@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'fs/promises';
+import sharp from 'sharp';
 
 export async function GET(request, { params }) {
   try {
@@ -24,7 +25,6 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const data = await request.formData();
-    console.log("Form data received:", data);
 
     const name = data.get('name');
     const description = data.get('description');
@@ -34,8 +34,6 @@ export async function PUT(request, { params }) {
     const thumbnailFile = data.get('thumbnail');
     const imageFiles = data.getAll('images');
 
-    console.log("Fields:", { name, description, price, categoryId });
-
     const uploadDir = join(process.cwd(), 'public/uploads');
     await mkdir(uploadDir, { recursive: true });
 
@@ -43,11 +41,14 @@ export async function PUT(request, { params }) {
     if (thumbnailFile && thumbnailFile.size > 0) {
       const bytes = await thumbnailFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${thumbnailFile.name}`;
+      const filename = `${Date.now()}-${thumbnailFile.name.split('.').slice(0, -1).join('.')}.webp`;
       const path = join(uploadDir, filename);
-      await writeFile(path, buffer);
+      
+      await sharp(buffer)
+        .webp({ quality: 90 })
+        .toFile(path);
+
       thumbnail = `/uploads/${filename}`;
-      console.log("Thumbnail uploaded:", thumbnail);
     }
 
     let images = [];
@@ -56,13 +57,16 @@ export async function PUT(request, { params }) {
         if (file.size > 0){
           const bytes = await file.arrayBuffer();
           const buffer = Buffer.from(bytes);
-          const filename = `${Date.now()}-${file.name}`;
+          const filename = `${Date.now()}-${file.name.split('.').slice(0, -1).join('.')}.webp`;
           const path = join(uploadDir, filename);
-          await writeFile(path, buffer);
+          
+          await sharp(buffer)
+            .webp({ quality: 90 })
+            .toFile(path);
+
           images.push(`/uploads/${filename}`);
         }
       }
-      console.log("Images uploaded:", images);
     }
 
     try {
@@ -78,7 +82,6 @@ export async function PUT(request, { params }) {
           ...(images.length > 0 && { images: images.join(',') }),
         },
       });
-      console.log("Product updated:", updatedProduct);
       return NextResponse.json(updatedProduct);
     } catch (prismaError) {
       console.error("Prisma error:", prismaError);

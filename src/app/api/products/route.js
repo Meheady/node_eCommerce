@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { mkdir } from 'fs/promises';
+import sharp from 'sharp';
 
 export async function GET() {
   try {
@@ -38,9 +39,13 @@ export async function POST(request) {
     if (thumbnailFile && thumbnailFile.size > 0) {
       const bytes = await thumbnailFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${thumbnailFile.name}`;
+      const filename = `${Date.now()}-${thumbnailFile.name.split('.').slice(0, -1).join('.')}.webp`;
       const path = join(uploadDir, filename);
-      await writeFile(path, buffer);
+      
+      await sharp(buffer)
+        .webp({ quality: 90 })
+        .toFile(path);
+
       thumbnail = `/uploads/${filename}`;
     } else {
       thumbnail = '/placeholder.jpg';
@@ -52,9 +57,13 @@ export async function POST(request) {
         if (file.size > 0) {
           const bytes = await file.arrayBuffer();
           const buffer = Buffer.from(bytes);
-          const filename = `${Date.now()}-${file.name}`;
+          const filename = `${Date.now()}-${file.name.split('.').slice(0, -1).join('.')}.webp`;
           const path = join(uploadDir, filename);
-          await writeFile(path, buffer);
+          
+          await sharp(buffer)
+            .webp({ quality: 90 })
+            .toFile(path);
+
           images.push(`/uploads/${filename}`);
         }
       }

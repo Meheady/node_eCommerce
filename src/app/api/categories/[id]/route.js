@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import sharp from 'sharp';
 
 
 export async function GET(request, { params }) {
@@ -30,9 +31,13 @@ export async function PUT(request, { params }) {
     if (file && file.size > 0) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const filename = `${Date.now()}-${file.name}`;
+      const filename = `${Date.now()}-${file.name.split('.').slice(0, -1).join('.')}.webp`;
       const path = join(process.cwd(), 'public/uploads', filename);
-      await writeFile(path, buffer);
+      
+      await sharp(buffer)
+        .webp({ quality: 90 })
+        .toFile(path);
+
       image = `/uploads/${filename}`;
     }
 
