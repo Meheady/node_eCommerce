@@ -1,0 +1,296 @@
+body {
+    background-color: #121212; /* Dark background for the whole page */
+    color: #e0e0e0; /* Light text color */
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 1080px; /* Max width for content */
+    margin: 0 auto; /* Center the container horizontally */
+    background-color: #2a2a2a; /* Slightly lighter background for the content area */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Make container full height of viewport */
+    overflow: hidden; /* Hide overflow of container itself */
+}
+
+.fixed-header {
+    background-color: #2a2a2a; /* Same as container for seamless look */
+    padding: 20px;
+    border-bottom: 1px solid #3a3a3a;
+    position: relative; /* Needed for positioning child elements if any */
+    z-index: 10; /* Ensure it stays on top */
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the logo */
+    margin-bottom: 20px;
+    position: relative; /* For the small dot */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-initials {
+    font-size: 32px;
+    font-weight: 700;
+    color: #bdbdbd; /* Light gray for initials */
+    border: 2px solid #bdbdbd;
+    border-radius: 5px;
+    padding: 8px;
+    line-height: 0.9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.logo-tech {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.contact-info {
+    font-size: 12px;
+    color: #ff4d4d; /* Red color for warning/info */
+    margin-top: 5px;
+    line-height: 1.3;
+}
+
+.phone-number {
+    font-weight: 700;
+    color: inherit; /* Inherit color from .contact-info */
+    text-decoration: none; /* Remove underline from link */
+    color: #1890ff; /* Blue color for phone number */
+}
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    display: flex;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #3a3a3a;
+}
+
+.keyword-search {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: none;
+    outline: none;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    font-size: 16px;
+}
+
+.keyword-search::placeholder {
+    color: #a0a0a0;
+}
+
+.search-button {
+    background-color: #1890ff; /* Blue search button */
+    border: none;
+    padding: 12px 18px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.search-button:hover {
+    background-color: #40a9ff;
+}
+
+.category-tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto; /* Allow horizontal scroll for tabs on small screens */
+    padding-bottom: 5px; /* Space for scrollbar if present */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.tab-button {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.tab-button.active {
+    background-color: #1890ff; /* Active tab color */
+    color: white;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: #4a4a4a;
+}
+
+.item-list-container {
+    flex-grow: 1; /* Take up remaining vertical space */
+    overflow-y: auto; /* Make item list scrollable */
+    padding: 20px 20px 15px 20px; /* Padding for the list, consider scrollbar */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    box-sizing: border-box; /* Include padding in height calculation */
+}
+
+/* Custom Scrollbar for Webkit browsers */
+.item-list-container::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2a2a2a; /* Scrollbar track color */
+}
+
+.item-list-container::-webkit-scrollbar-thumb {
+    background-color: #555; /* Scrollbar thumb color */
+    border-radius: 4px;
+    border: 1px solid #2a2a2a; /* Border around thumb */
+}
+
+.item-list-container::-webkit-scrollbar-thumb:hover {
+    background-color: #777;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    background-color: #3a3a3a;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    gap: 15px; /* Add space between image, details, and price */
+}
+
+.item-image {
+    width: 45px;
+    height: 45px;
+    background-color: #555; /* Placeholder color */
+    border-radius: 4px;
+    flex-shrink: 0; /* Prevent image from shrinking */
+    object-fit: cover; /* Ensures image covers the area without distortion */
+}
+
+.item-details {
+    flex-grow: 1; /* Allow item name to take up available space */
+}
+
+.item-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.item-price-stock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1890ff; /* Blue for price */
+    margin-bottom: 5px;
+}
+
+.item-stock {
+    background-color: #555;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Style for out-of-stock or restocking items */
+.item-stock.restocking {
+    color: #ff0000; /* Red color for warning */
+    background-color: #6e4545; /* Darker red background for contrast */
+}
+
+/* Footer Styles */
+.page-footer {
+    text-align: center;
+    padding: 5px 20px;
+    background-color: #1f1f1f; /* Slightly different dark shade for footer */
+    border-top: 1px solid #3a3a3a;
+    font-size: 12px;
+    color: #a0a0a0;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+.dev-link {
+    color: #1890ff; /* Use the theme's primary blue color */
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .fixed-header {
+        padding: 15px;
+    }
+
+    .logo-initials {
+        font-size: 30px;
+        padding: 3px 8px;
+    }
+
+    .logo-text {
+        font-size: 22px;
+    }
+
+    .contact-info {
+        font-size: 10px;
+    }
+
+    .keyword-search {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .search-button {
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+
+    .category-tabs {
+        gap: 8px;
+        padding-bottom: 0; /* Remove padding if not needed for scrollbar */
+    }
+
+    .tab-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .item-list-container {
+        padding: 15px 15px 10px 15px;
+    }
+}
