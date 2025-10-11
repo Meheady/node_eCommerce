@@ -38,9 +38,6 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login/admin",
-  },
   callbacks: {
     async jwt({ token, user }) {
       // This callback is called whenever a JWT is created or updated.
