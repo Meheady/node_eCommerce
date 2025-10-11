@@ -72,7 +72,7 @@ export async function PUT(request, { params }) {
           name,
           description,
           price: parseFloat(price),
-          stock: stock ?? 0,
+          stock: parseFloat(stock) ?? 0,
           categoryId: parseInt(categoryId),
           ...(thumbnail && { thumbnail }),
           ...(images.length > 0 && { images: images.join(',') }),
