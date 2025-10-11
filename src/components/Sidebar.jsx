@@ -2,7 +2,7 @@
 "use client"
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import { House, BoxSeam, List, ChevronDown, ChevronRight, Gear } from 'react-bootstrap-icons';
+import { House, BoxSeam, List, ChevronDown, ChevronRight, Gear, BoxArrowUpRight } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from "next/link";
 
@@ -35,6 +35,18 @@ const Sidebar = () => {
                 </button>
             </div>
             <Nav className="flex-column">
+
+                <Nav.Link
+                    as={Link}
+                    href="/"
+                    target={"_blank"}
+                    style={hoveredLink === 'visit-site' ? { ...navLinkStyle, ...navLinkHoverStyle } : navLinkStyle}
+                    onMouseEnter={() => setHoveredLink('visit-site')}
+                    onMouseLeave={() => setHoveredLink(null)}
+                >
+                    <BoxArrowUpRight size={20} /> {!isCollapsed && <span style={navLinkTextStyle}>Visit Site</span>}
+                </Nav.Link>
+
                 <Nav.Link
                     as={Link}
                     href="/admin"
