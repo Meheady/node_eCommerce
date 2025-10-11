@@ -1,8 +1,11 @@
+import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../../api/auth/[...nextauth]/route"; // Adjust path as needed
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Adjust path as needed
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+
+const prisma = new PrismaClient();
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
@@ -23,8 +26,11 @@ export async function POST(request) {
       await writeFile(path, buffer);
 
       const logoPath = `/uploads/${filename}`;
-      // Here you would typically save the logoPath to your database
-      // For example: await prisma.setting.update({ where: { key: 'logo' }, data: { value: logoPath } });
+      await prisma.setting.upsert({
+        where: { key: 'logo' },
+        update: { value: logoPath },
+        create: { key: 'logo', value: logoPath },
+      });
 
       return NextResponse.json({ message: 'Logo uploaded successfully', logoPath }, { status: 200 });
     } else {
