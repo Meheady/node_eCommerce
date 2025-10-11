@@ -294,3 +294,23 @@ body {
         padding: 15px 15px 10px 15px;
     }
 }
+
+.no-items-found {
+  text-align: center;
+  padding: 40px;
+  margin: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.no-items-found h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.no-items-found p {
+  font-size: 1em;
+  color: #666;
+}

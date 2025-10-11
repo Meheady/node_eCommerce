@@ -78,29 +78,36 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
 
       <main className="item-list-container">
         <div className="item-list">
-          {filteredItems.map((item) => (
-            <div className="list-item" key={item.id}>
-              <Image
-                className="item-image"
-                src={item.image || '/placeholder.jpg'}
-                alt={item.name}
-                width={45}
-                height={45}
-                unoptimized={item.image && item.image.startsWith('data:image')} // for base64 images
-              />
-              <div className="item-details">
-                <div className="item-name">{item.name}</div>
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item) => (
+              <div className="list-item" key={item.id}>
+                <Image
+                  className="item-image"
+                  src={item.image || '/placeholder.jpg'}
+                  alt={item.name}
+                  width={45}
+                  height={45}
+                  unoptimized={item.image && item.image.startsWith('data:image')} // for base64 images
+                />
+                <div className="item-details">
+                  <div className="item-name">{item.name}</div>
+                </div>
+                <div className="item-price-stock">
+                  <div className="item-price">€{item.price}</div>
+                  {item.stock > 0 ? (
+                    <div className="item-stock">In Stock : {item.stock}</div>
+                  ) : (
+                    <div className="item-stock restocking">Restocking Soon</div>
+                  )}
+                </div>
               </div>
-              <div className="item-price-stock">
-                <div className="item-price">€{item.price}</div>
-                {item.stock > 0 ? (
-                  <div className="item-stock">In Stock : {item.stock}</div>
-                ) : (
-                  <div className="item-stock restocking">Restocking Soon</div>
-                )}
-              </div>
+            ))
+          ) : (
+            <div className="no-items-found">
+              <h2>No items found</h2>
+              <p>Please try a different category or search term.</p>
             </div>
-          ))}
+          )}
         </div>
       </main>
 
