@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
 import '../../public/website.css';
 
@@ -9,6 +9,7 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [allItems, setAllItems] = useState(initialAllItems);
   const [categories, setCategories] = useState(initialCategories);
+  const deferredPrompt = useRef(null);
 
   useEffect(() => {
     if (initialCategories.length > 0) {
@@ -22,28 +23,109 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
     return categoryMatch && searchMatch;
   });
 
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      deferredPrompt.current = e;
+      const installDialog = document.getElementById('install-dialog');
+      if (installDialog) {
+        installDialog.style.display = 'flex';
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+
+    const installDialog = document.getElementById('install-dialog');
+    const installButton = document.getElementById('install-button-dialog');
+    const closeButton = document.getElementById('close-button-dialog');
+
+    const handleInstallClick = () => {
+      if (deferredPrompt.current) {
+        deferredPrompt.current.prompt();
+        deferredPrompt.current.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt.current = null;
+        });
+      }
+      if (installDialog) {
+        installDialog.style.display = 'none';
+      }
+    }
+
+    if (installButton) {
+      installButton.addEventListener('click', handleInstallClick);
+    }
+
+    const handleCloseClick = () => {
+      if (installDialog) {
+        installDialog.style.display = 'none';
+      }
+    }
+
+    if (closeButton) {
+      closeButton.addEventListener('click', handleCloseClick);
+    }
+
+    const setVh = () => {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', setVh);
+
+    setVh();
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+      if (installButton) {
+        installButton.removeEventListener('click', handleInstallClick);
+      }
+      if (closeButton) {
+        closeButton.removeEventListener('click', handleCloseClick);
+      }
+      window.removeEventListener('resize', setVh);
+      window.removeEventListener('orientationchange', setVh);
+    }
+  }, []);
+
   return (
     <>
-      <header className="fixed-header">
-        <div className="logo-section">
-          <div className="logo">
-            <div className="logo-initials">
-              <span>MB</span>
-              <span className="logo-tech">TECH</span>
-            </div>
-            <div className="logo-text">
-              Price List
-              <div className="contact-info">
-                Dial:{' '}
-                <a href="tel:+351920282747" className="phone-number">
-                  +351 920 282 747
-                </a>{' '}
-                to verify <br />
-                availability (if Quantity less than 3)
+      <div className="container">
+        <header className="fixed-header">
+          <div className="logo-section">
+            <div className="logo">
+              <img className="logo-image" src="/logo.webp" alt="MB TECH Logo" />
+              <div className="logo-text">
+                Price List
+                <div className="contact-info">
+                  Dial:
+                  <a href="tel:+351920282747" className="phone-number">
+                    +351 920 282 747
+                  </a>
+                  to verify <br />
+                  availability (if Quantity less than 3)
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
         <div className="search-section">
           <div className="search-bar">
@@ -104,24 +186,46 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
             ))
           ) : (
             <div className="no-items-found">
-              <h2>No items found</h2>
+              <h3>No items found</h3>
               <p>Please try a different category or search term.</p>
             </div>
           )}
         </div>
       </main>
 
-      <footer className="page-footer">
-        Developed By:{' '}
-        <a
-          href="https://wa.me/8801988701570"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="dev-link"
-        >
-          DevOrbit
-        </a>
-      </footer>
+        <footer className="page-footer">
+          Developed By :
+          <a
+              href="https://wa.me/8801988701570"
+              target="_blank"
+              className="dev-link"
+          >
+            DevOrbit
+          </a>
+        </footer>
+      </div>
+
+      <div
+          id="install-dialog"
+          className="dialog-container"
+          style={{ display: 'none' }}
+      >
+        <div className="dialog">
+          <h3 className="dialog-title">Install App</h3>
+          <p>Install this application on your device for a better experience.</p>
+          <div className="dialog-buttons">
+            <button id="install-button-dialog" className="dialog-button">
+              Install
+            </button>
+            <button
+                id="close-button-dialog"
+                className="dialog-button-secondary"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

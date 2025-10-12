@@ -1,19 +1,23 @@
 body {
-    background-color: #121212; /* Dark background for the whole page */
-    color: #e0e0e0; /* Light text color */
     margin: 0;
     font-family: "Roboto", sans-serif;
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text color */
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden; /* Prevent body scroll */
 }
 
 .container {
     width: 100%;
     max-width: 1080px; /* Max width for content */
-    margin: 0 auto; /* Center the container horizontally */
-    background-color: #2a2a2a; /* Slightly lighter background for the content area */
+    background-color: #2a2a2a; /* Inner container background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Make container full height of viewport */
+    height: 100vh; /* Fallback */
+    height: calc(var(--vh, 1vh) * 100);
     overflow: hidden; /* Hide overflow of container itself */
 }
 
@@ -39,19 +43,8 @@ body {
     gap: 10px;
 }
 
-.logo-initials {
-    font-size: 32px;
-    font-weight: 700;
-    color: #bdbdbd; /* Light gray for initials */
-    border: 2px solid #bdbdbd;
-    border-radius: 5px;
-    padding: 8px;
-    line-height: 0.9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+.logo-image {
+    height: 60px;
 }
 
 .logo-tech {
@@ -257,11 +250,6 @@ body {
         padding: 15px;
     }
 
-    .logo-initials {
-        font-size: 30px;
-        padding: 3px 8px;
-    }
-
     .logo-text {
         font-size: 22px;
     }
@@ -295,22 +283,58 @@ body {
     }
 }
 
-.no-items-found {
-  text-align: center;
-  padding: 40px;
-  margin: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+.dialog-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }
 
-.no-items-found h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
+.dialog {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 300px;
+    width: 80%;
 }
 
-.no-items-found p {
-  font-size: 1em;
-  color: #666;
+.dialog-title {
+    margin-top: 0;
+    color: #e0e0e0;
+}
+
+.dialog p {
+    color: #a0a0a0;
+}
+
+.dialog-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.dialog-button, .dialog-button-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dialog-button {
+    background-color: #1890ff;
+    color: white;
+}
+
+.dialog-button-secondary {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
 }

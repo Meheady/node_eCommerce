@@ -1,36 +1,36 @@
 {
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "id": "/",
+  "name": "MB-Tech Price List",
+  "short_name": "MB-Tech",
+  "start_url": "index.html",
   "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
-  "name": "MB TECH",
-  "short_name": "MB TECH",
-  "description": "MB Tech Price Listing",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "description": "Price list for MB-Tech.",
   "icons": [
     {
-      "src": "/pwa-icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "logo.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
     },
     {
-      "src": "/pwa-icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
+      "src": "logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
     }
   ],
-  "screenshots": [
+  "related_applications": [
     {
-      "src": "/screenshots/desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
+      "platform": "webapp",
+      "url": "https://mbtechpt.com/manifest.json",
+      "id": "/"
+    }
+  ],
+  "url_handlers": [
     {
-      "src": "/screenshots/mobile.png",
-      "sizes": "720x1280",
-      "type": "image/png"
+      "origin": "https://mbtechpt.com"
     }
   ]
 }

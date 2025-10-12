@@ -21,21 +21,6 @@ export default function RootLayout({ children }) {
         <html lang="en">
         <head>
             <link rel="manifest" href="/manifest.json" />
-            <script
-                dangerouslySetInnerHTML={{
-                    __html: `
-                        if ('serviceWorker' in navigator) {
-                            window.addEventListener('load', () => {
-                                navigator.serviceWorker.register('/sw.js').then(registration => {
-                                    console.log('SW registered: ', registration);
-                                }).catch(registrationError => {
-                                    console.log('SW registration failed: ', registrationError);
-                                });
-                            });
-                        }
-                    `,
-                }}
-            />
         </head>
         <body className={roboto.className}>
 
