@@ -108,7 +108,7 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
 
   return (
     <>
-      <div className="container">
+      <div className="container-web">
         <header className="fixed-header">
           <div className="logo-section">
             <div className="logo">

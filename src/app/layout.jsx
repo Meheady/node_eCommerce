@@ -13,6 +13,9 @@ const roboto = Roboto({
 export const metadata = {
     title: "Price List | MB-Tech",
     description: "Price list for MB-Tech products.",
+    icons: {
+        icon: "/logo.webp",
+    },
 };
 
 
@@ -20,11 +23,12 @@ export default function RootLayout({ children }) {
     return (
         <html lang="en">
         <head>
-            <link rel="manifest" href="/manifest.json" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <link rel="manifest" href="/manifest.json"/>
         </head>
         <body className={roboto.className}>
 
-            <div className="container">{children}</div>
+        <>{children}</>
 
 
         <Script
