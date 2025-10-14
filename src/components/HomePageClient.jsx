@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
 import '../../public/website.css';
 
-export default function HomePageClient({ initialAllItems, initialCategories }) {
+export default function HomePageClient({ initialAllItems, initialCategories, logo }) {
   const [activeTab, setActiveTab] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [allItems, setAllItems] = useState(initialAllItems);
@@ -108,11 +108,14 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
 
   return (
     <>
+      <head>
+        <link rel="icon" href={logo} />
+      </head>
       <div className="container-web">
         <header className="fixed-header">
           <div className="logo-section">
             <div className="logo">
-              <img className="logo-image" src="/logo.webp" alt="MB TECH Logo" />
+              <img className="logo-image" src={logo} alt="MB TECH Logo" />
               <div className="logo-text">
                 Price List
                 <div className="contact-info">
@@ -165,7 +168,7 @@ export default function HomePageClient({ initialAllItems, initialCategories }) {
               <div className="list-item" key={item.id}>
                 <Image
                   className="item-image"
-                  src={item.image || '/placeholder.jpg'}
+                  src={item.thumbnail || '/placeholder.jpg'}
                   alt={item.name}
                   width={45}
                   height={45}

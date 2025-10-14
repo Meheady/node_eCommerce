@@ -13,9 +13,6 @@ const roboto = Roboto({
 export const metadata = {
     title: "Price List | MB-Tech",
     description: "Price list for MB-Tech products.",
-    icons: {
-        icon: "/logo.webp",
-    },
 };
 
 
