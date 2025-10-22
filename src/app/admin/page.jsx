@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma';
 import DashboardClient from './DashboardClient';
 
+export const revalidate = 60;
+
 async function getDashboardData() {
   const productCount = await prisma.product.count();
   const categoryCount = await prisma.category.count();

@@ -142,7 +142,7 @@ export default function ProductsPage() {
               <td>{product.category?.name}</td>
               <td>
                 <Button variant="warning" onClick={() => openModal(product)} className="me-2">Edit</Button>
-                <Button variant="danger" onClick={() => handleDelete(product.id)}>Delete</Button>
+                <Button variant="danger" onClick={() => window.confirm("Are you sure?") &&  handleDelete(product.id)}>Delete</Button>
               </td>
             </tr>
           ))}

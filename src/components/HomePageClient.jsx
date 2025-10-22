@@ -115,31 +115,37 @@ export default function HomePageClient({ initialAllItems, initialCategories, log
         <header className="fixed-header">
           <div className="logo-section">
             <div className="logo">
-              <img className="logo-image" src={logo} alt="MB TECH Logo" />
+              <img className="logo-image" src={logo} alt="MB TECH Logo"/>
               <div className="logo-text">
-                Price List
+                MB-TECH
                 <div className="contact-info">
-                  Dial:
-                  <a href="tel:+351920282747" className="phone-number">
-                    +351 920 282 747
+                  <a href="tel:+351920282747" className="btn btn-sm btn-primary me-2">
+                    <i className="fas fa-phone"></i>  Call
                   </a>
-                  to verify <br />
-                  availability (if Quantity less than 3)
+                  <a
+                      href="https://wa.me/351920282747"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-sm whatsapp-btn "
+                  >
+                    <i className="fab fa-whatsapp"></i> WhatsApp
+                  </a>
                 </div>
               </div>
+
             </div>
           </div>
 
-        <div className="search-section">
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Keyword Search"
-              className="keyword-search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button className="search-button">
+          <div className="search-section">
+            <div className="search-bar">
+              <input
+                  type="text"
+                  placeholder="Keyword Search"
+                  className="keyword-search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button className="search-button">
               <i className="fas fa-search"></i>
             </button>
           </div>

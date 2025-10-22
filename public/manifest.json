@@ -4,8 +4,8 @@
   "short_name": "MB-Tech",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#121212",
+  "background_color": "#051650",
+  "theme_color": "#051650",
   "description": "Price list for MB-Tech.",
   "icons": [
     {
