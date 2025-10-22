@@ -36,7 +36,7 @@ export default function NewCategoryPage() {
             placeholder="Enter category name"
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3 d-none">
           <Form.Label>Image</Form.Label>
           <Form.Control
             type="file"

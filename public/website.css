@@ -338,3 +338,14 @@ body {
     background-color: #3a3a3a;
     color: #e0e0e0;
 }
+
+.whatsapp-btn {
+    background-color: #25D366; /* WhatsApp Brand Color */
+    color: white;
+    border: none;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d; /* slightly darker shade for hover */
+    color: white;
+}
