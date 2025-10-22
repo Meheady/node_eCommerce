@@ -119,11 +119,11 @@ export default function HomePageClient({ initialAllItems, initialCategories, log
               <div className="logo-text">
                 MB-TECH
                 <div className="contact-info">
-                  <a href="tel:+351920282747" className="btn btn-sm btn-primary me-2">
-                    <i className="fas fa-phone"></i>  Call
+                  <a href="tel:+351920292617" className="btn btn-sm btn-primary me-2">
+                    <i className="fas fa-phone"></i>  +35 1920292617
                   </a>
                   <a
-                      href="https://wa.me/351920282747"
+                      href="https://wa.me/351920292617"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-sm whatsapp-btn "
