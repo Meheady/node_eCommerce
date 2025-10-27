@@ -113,9 +113,11 @@ export default function HomePageClient({ initialAllItems, initialCategories, log
         </head>
 
           <div className="container-web">
-            <div id="stars"></div>
-            <div id="stars2"></div>
-            <div id="stars3"></div>
+            <div className="stars-background">
+              <div id="stars"></div>
+              <div id="stars2"></div>
+              <div id="stars3"></div>
+            </div>
             <header className="fixed-header">
               <div className="logo-section">
                 <div className="logo">
