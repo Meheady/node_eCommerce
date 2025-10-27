@@ -12,7 +12,7 @@ body {
 .container-web {
     width: 100%!important;
     max-width: 1080px!important; /* Max width for content */
-    background-color: #051650!important; /* Inner container background */
+    background: radial-gradient(ellipse at bottom, #134C7C 0%, #07173D 100%)!important; /* Inner container background */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4)!important;
     display: flex!important;
     flex-direction: column!important;
@@ -348,4 +348,74 @@ body {
 .whatsapp-btn:hover {
     background-color: #1ebe5d;
     color: white;
+}
+
+
+
+
+/* Star-er layers-gulo setup kora holo */
+#stars, #stars2, #stars3 {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    position: absolute; /* .stars-container-er modhye position kora */
+    /* Tarader color white set kora holo */
+    box-shadow: 0 0 #FFF;
+}
+
+/* Animation keyframes: Taragulo niche theke upore dhire dhire move korbe */
+/* Niche theke shuru hoye upore giye abar niche ashbe */
+@keyframes animStar {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-2000px); /* Pray 2000px upore move korbe */
+    }
+}
+
+/* Choto tarader jonno */
+#stars {
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 150s linear infinite; /* Shobcheye dhire (150 seconds) */
+}
+
+/* Majhari tarader jonno (astar beshi dhire hobe, alada parallax effect-er jonno) */
+#stars2 {
+    width: 2px; /* Ektu boro size */
+    height: 2px;
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 100s linear infinite; /* Majhari goti (100 seconds) */
+}
+
+/* Boro tarader jonno (abar beshi dhire) */
+#stars3 {
+    width: 3px; /* Shobcheye boro size */
+    height: 3px;
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 50s linear infinite; /* Shobcheye druto (50 seconds) */
+}
+
+/* Extra tarader effect-er jonno pseudo-element use kora holo */
+/* Ei gulo tarader opore du'bar overlay kore, jate beshi tara dekha jay */
+#stars::after, #stars2::after, #stars3::after {
+    content: "";
+    position: absolute;
+    top: 2000px; /* Jate animation-er shuruteo tara dekha jay */
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    /* Tarader shadow gulo nirdisto layer theke pabe */
+    box-shadow: inherit;
+}
+
+#stars2::after {
+    width: 2px;
+    height: 2px;
+}
+
+#stars3::after {
+    width: 3px;
+    height: 3px;
 }
