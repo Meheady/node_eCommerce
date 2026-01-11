@@ -1,4 +1,5 @@
 import './bootstrap';
+import './star.js';
 
 import Alpine from 'alpinejs';
 
