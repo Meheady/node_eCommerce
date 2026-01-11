@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -16,10 +17,29 @@ class SettingsController extends Controller
 
     public function updateWebsiteSettings(Request $request)
     {
-        $settings = $request->except('_token');
+        $request->validate([
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
+
+        $settings = $request->except('_token', 'logo');
+
+        if ($request->hasFile('logo')) {
+            $oldLogoPath = Setting::where('key', 'logo')->value('value');
+            if ($oldLogoPath) {
+                Storage::disk('public')->delete($oldLogoPath);
+            }
+            $path = $request->file('logo')->store('logos', 'public');
+            Setting::updateOrCreate(
+                ['key' => 'logo', 'value' => $path],
+            );
+        }
 
         foreach ($settings as $key => $value) {
-            Setting::where('key', $key)->update(['value' => $value]);
+            if($value === null) continue;
+            Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
         }
 
         return redirect()->back()->with('success', 'Settings updated successfully.');

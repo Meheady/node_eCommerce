@@ -17,7 +17,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('admin.settings.website.update') }}" method="POST">
+                    <form action="{{ route('admin.settings.website.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="mb-4">
@@ -33,6 +33,17 @@
                         <div class="mb-4">
                             <label for="footer_text" class="block text-gray-700 text-sm font-bold mb-2">Footer Text:</label>
                             <textarea name="footer_text" id="footer_text" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ $settings['footer_text'] ?? '' }}</textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="logo" class="block text-gray-700 text-sm font-bold mb-2">Logo:</label>
+                            <input type="file" name="logo" id="logo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            @if (isset($settings['logo']))
+                                <div class="mt-4">
+                                    <p class="font-semibold">Current Logo:</p>
+                                    <img src="{{ asset('storage/' . $settings['logo']) }}" alt="Website Logo" class="w-32 h-auto object-contain rounded">
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex items-center justify-between">

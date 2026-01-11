@@ -1,6 +1,7 @@
 @forelse ($products as $product)
-    <a href="{{ route('products.show', $product) }}" class="list-item">
-        <img class="item-image" src="{{ $product->thumbnail ?: '/placeholder.jpg' }}" alt="{{ $product->name }}" width="45" height="45">
+    <a href="#" class="list-item">
+
+        <img class="item-image" src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" width="45" height="45">
         <div class="item-details">
             <div class="item-name">{{ $product->name }}</div>
         </div>
