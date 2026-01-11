@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         $categories = Category::all();
         $logoSetting = Setting::where('key', 'logo')->first();
-        $logo = $logoSetting ? $logoSetting->value : '/placeholder.jpg';
+        $logo = $logoSetting ? asset('storage/' . $logoSetting->value) : '/placeholder.jpg';
         $activeCategoryName = $request->input('category', $categories->first()->name ?? '');
 
         $productQuery = Product::query()->whereHas('category', function ($query) use ($activeCategoryName) {

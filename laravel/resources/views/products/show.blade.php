@@ -110,7 +110,7 @@
             <a href="{{ url('/') }}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
 
             <div class="product-main">
-                <img src="{{ $product->thumbnail ?: '/placeholder.jpg' }}" alt="{{ $product->name }}">
+                <img src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : '/placeholder.jpg' }}" alt="{{ $product->name }}">
                 <div class="product-info">
                     <h1>{{ $product->name }}</h1>
                     <div class="price">€{{ $product->price }}</div>
@@ -133,7 +133,7 @@
                 <div class="related-products-grid">
                     @foreach($relatedProducts as $related)
                         <a href="{{ route('products.show', $related) }}" class="related-product-item">
-                            <img src="{{ $related->thumbnail ?: '/placeholder.jpg' }}" alt="{{ $related->name }}">
+                            <img src="{{ $related->thumbnail ? asset('storage/' . $related->thumbnail) : '/placeholder.jpg' }}" alt="{{ $related->name }}">
                             <h3>{{ $related->name }}</h3>
                             <p>€{{ $related->price }}</p>
                         </a>

@@ -1,7 +1,6 @@
 @forelse ($products as $product)
-    <a href="#" class="list-item">
-
-        <img class="item-image" src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" width="45" height="45">
+    <div class="list-item">
+        <img class="item-image" src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : '/placeholder.jpg' }}" alt="{{ $product->name }}" width="45" height="45">
         <div class="item-details">
             <div class="item-name">{{ $product->name }}</div>
         </div>
@@ -13,7 +12,7 @@
                 <div class="item-stock restocking">Restocking Soon</div>
             @endif
         </div>
-    </a>
+    </div>
 @empty
     <div class="no-items-found">
         <h3>No items found</h3>
