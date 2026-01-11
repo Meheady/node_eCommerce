@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Categories') }}
@@ -8,27 +8,37 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    <div class="flex justify-end mb-4">
-                        <a href="{{ route('admin.categories.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Category</a>
+                <div class="p-6 text-gray-900">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold">Category List</h3>
+                        <a href="{{ route('admin.categories.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Add New Category
+                        </a>
                     </div>
-                    <table class="min-w-full">
-                        <thead>
+
+                    @if (session('success'))
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <span class="block sm:inline">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-800 text-white">
                             <tr>
-                                <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 border-b-2 border-gray-300"></th>
+                                <th class="w-2/3 text-left py-3 px-4 uppercase font-semibold text-sm">Name</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-gray-700">
                             @foreach ($categories as $category)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500">{{ $category->name }}</td>
-                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5 font-medium">
-                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="inline">
+                                    <td class="w-2/3 text-left py-3 px-4">{{ $category->name }}</td>
+                                    <td class="text-left py-3 px-4">
+                                        <a href="{{ route('admin.categories.edit', $category->id) }}" class="text-blue-500 hover:text-blue-700">Edit</a>
+                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+                                            <button type="submit" class="text-red-500 hover:text-red-700 ml-4">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -39,4 +49,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>
