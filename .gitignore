@@ -5,5 +5,5 @@ node_modules
 /src/generated/prisma
 
 .next
-
+*.zip
 /public/uploads/

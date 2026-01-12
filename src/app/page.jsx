@@ -5,16 +5,19 @@ export const revalidate = 60;
 
 async function getHomePageData() {
   const categories = await prisma.category.findMany();
+  const logoSetting = await prisma.setting.findUnique({
+    where: { key: 'logo' },
+  });
   const products = await prisma.product.findMany({
     include: {
       category: true,
     },
   });
-  return { categories, products };
+  return { categories, products,logo: logoSetting?.value || '/placeholder.jpg' };
 }
 
 export default async function HomePage() {
-  const { categories, products } = await getHomePageData();
+  const { categories, products, logo } = await getHomePageData();
 
-  return <HomePageClient initialAllItems={products} initialCategories={categories} />;
+  return <HomePageClient logo={logo}  initialAllItems={products} initialCategories={categories} />;
 }

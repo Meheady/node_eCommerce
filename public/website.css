@@ -9,32 +9,42 @@ body {
     overflow: hidden; /* Prevent body scroll */
 }
 
-.container {
+.container-web {
+    width: 100%!important;
+    max-width: 1080px!important; /* Max width for content */
+    background: radial-gradient(ellipse at bottom, #134C7C 0%, #07173D 100%)!important; /* Inner container background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4)!important;
+    display: flex!important;
+    flex-direction: column!important;
+    height: 100vh!important; /* Fallback */
+    height: calc(var(--vh, 1vh) * 100)!important;
+    overflow: hidden!important; /* Hide overflow of container itself */
+}
+
+.stars-background {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    max-width: 1080px; /* Max width for content */
-    background-color: #2a2a2a; /* Inner container background */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Fallback */
-    height: calc(var(--vh, 1vh) * 100);
-    overflow: hidden; /* Hide overflow of container itself */
+    height: 100%;
+    z-index: 0;
 }
 
 .fixed-header {
-    background-color: #2a2a2a; /* Same as container for seamless look */
+    background-color: unset; /* Slightly lighter blue with transparency */
+    backdrop-filter: blur(2px);
     padding: 20px;
-    border-bottom: 1px solid #3a3a3a;
-    position: relative; /* Needed for positioning child elements if any */
-    z-index: 10; /* Ensure it stays on top */
+    border-bottom: 1px solid #1a358a;
+    position: relative;
+    z-index: 10;
 }
 
 .logo-section {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the logo */
+    justify-content: center;
     margin-bottom: 20px;
-    position: relative; /* For the small dot */
+    position: relative;
 }
 
 .logo {
@@ -51,6 +61,7 @@ body {
     font-size: 18px;
     font-weight: 500;
     margin-top: 5px;
+    color: #a0a0a0;
 }
 
 .logo-text {
@@ -61,16 +72,15 @@ body {
 
 .contact-info {
     font-size: 12px;
-    color: #ff4d4d; /* Red color for warning/info */
+    color: #ff4d4d;
     margin-top: 5px;
     line-height: 1.3;
 }
 
 .phone-number {
     font-weight: 700;
-    color: inherit; /* Inherit color from .contact-info */
-    text-decoration: none; /* Remove underline from link */
-    color: #1890ff; /* Blue color for phone number */
+    text-decoration: none;
+    color: #1890ff;
 }
 
 .search-section {
@@ -81,7 +91,9 @@ body {
     display: flex;
     border-radius: 5px;
     overflow: hidden;
-    background-color: #3a3a3a;
+    background-color: unset;
+    backdrop-filter: blur(2px);
+    border: 1px solid #1a358a;
 }
 
 .keyword-search {
@@ -89,7 +101,7 @@ body {
     padding: 12px 15px;
     border: none;
     outline: none;
-    background-color: #3a3a3a;
+    background-color: transparent;
     color: #e0e0e0;
     font-size: 16px;
 }
@@ -99,7 +111,7 @@ body {
 }
 
 .search-button {
-    background-color: #1890ff; /* Blue search button */
+    background-color: #1890ff;
     border: none;
     padding: 12px 18px;
     color: white;
@@ -118,78 +130,83 @@ body {
 .category-tabs {
     display: flex;
     gap: 10px;
-    overflow-x: auto; /* Allow horizontal scroll for tabs on small screens */
-    padding-bottom: 5px; /* Space for scrollbar if present */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-x: auto;
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tab-button {
-    background-color: #3a3a3a;
+    background-color: rgba(10, 32, 105, 0.5);
+    backdrop-filter: blur(2px);
     color: #e0e0e0;
-    border: none;
+    border: 1px solid #1a358a;
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 15px;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
+    flex-shrink: 0;
     transition: background-color 0.2s, color 0.2s;
 }
 
 .tab-button.active {
-    background-color: #1890ff; /* Active tab color */
+    background-color: #1890ff;
     color: white;
+    border-color: #1890ff;
 }
 
 .tab-button:hover:not(.active) {
-    background-color: #4a4a4a;
+    background-color: #1a358a;
 }
 
 .item-list-container {
-    flex-grow: 1; /* Take up remaining vertical space */
-    overflow-y: auto; /* Make item list scrollable */
-    padding: 20px 20px 15px 20px; /* Padding for the list, consider scrollbar */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    box-sizing: border-box; /* Include padding in height calculation */
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px 20px 15px 20px;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
-/* Custom Scrollbar for Webkit browsers */
 .item-list-container::-webkit-scrollbar {
     width: 8px;
-    background-color: #2a2a2a; /* Scrollbar track color */
+    background-color: #051650;
 }
 
 .item-list-container::-webkit-scrollbar-thumb {
-    background-color: #555; /* Scrollbar thumb color */
+    background-color: #1a358a;
     border-radius: 4px;
-    border: 1px solid #2a2a2a; /* Border around thumb */
+    border: 1px solid #051650;
 }
 
 .item-list-container::-webkit-scrollbar-thumb:hover {
-    background-color: #777;
+    background-color: #40a9ff;
 }
 
 .list-item {
     display: flex;
     align-items: center;
-    background-color: #3a3a3a;
+    background-color: unset;
+    backdrop-filter: blur(2px);
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    gap: 15px; /* Add space between image, details, and price */
+    gap: 15px;
+    border: 1px solid #1a358a;
 }
 
 .item-image {
     width: 45px;
     height: 45px;
-    background-color: #555; /* Placeholder color */
+    background-color: #1a358a;
     border-radius: 4px;
-    flex-shrink: 0; /* Prevent image from shrinking */
-    object-fit: cover; /* Ensures image covers the area without distortion */
+    flex-shrink: 0;
+    object-fit: cover;
 }
 
 .item-details {
-    flex-grow: 1; /* Allow item name to take up available space */
+    flex-grow: 1;
 }
 
 .item-name {
@@ -207,44 +224,46 @@ body {
 .item-price {
     font-size: 18px;
     font-weight: 700;
-    color: #1890ff; /* Blue for price */
+    color: #1890ff;
     margin-bottom: 5px;
 }
 
 .item-stock {
-    background-color: #555;
-    color: white;
+    background-color: rgba(26, 53, 138, 0.5);
+    backdrop-filter: blur(2px);
+    color: #e0e0e0;
     font-size: 12px;
     padding: 4px 8px;
     border-radius: 3px;
-    white-space: nowrap; /* Prevent text wrapping */
+    white-space: nowrap;
 }
 
-/* Style for out-of-stock or restocking items */
 .item-stock.restocking {
-    color: #ff0000; /* Red color for warning */
-    background-color: #6e4545; /* Darker red background for contrast */
+    color: #ff4d4d;
+    background-color: rgba(110, 69, 69, 0.5);
+    backdrop-filter: blur(2px);
 }
 
-/* Footer Styles */
 .page-footer {
     text-align: center;
     padding: 5px 20px;
-    background-color: #1f1f1f; /* Slightly different dark shade for footer */
-    border-top: 1px solid #3a3a3a;
+    background-color: #0a2069;
+    backdrop-filter: blur(2px);
+    border-top: 1px solid #1a358a;
     font-size: 12px;
     color: #a0a0a0;
-    flex-shrink: 0; /* Prevent footer from shrinking */
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .dev-link {
-    color: #1890ff; /* Use the theme's primary blue color */
+    color: #1890ff;
     text-decoration: none;
     font-weight: 700;
     transition: color 0.2s;
 }
 
-/* Responsive Design */
 @media (max-width: 600px) {
     .fixed-header {
         padding: 15px;
@@ -270,7 +289,7 @@ body {
 
     .category-tabs {
         gap: 8px;
-        padding-bottom: 0; /* Remove padding if not needed for scrollbar */
+        padding-bottom: 0;
     }
 
     .tab-button {
@@ -297,13 +316,14 @@ body {
 }
 
 .dialog {
-    background-color: #2a2a2a;
+    background-color: #0a2069;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     text-align: center;
     max-width: 300px;
     width: 80%;
+    border: 1px solid #1a358a;
 }
 
 .dialog-title {
@@ -335,6 +355,87 @@ body {
 }
 
 .dialog-button-secondary {
-    background-color: #3a3a3a;
+    background-color: #1a358a;
     color: #e0e0e0;
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+    border: none;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d;
+    color: white;
+}
+
+
+
+
+/* Star-er layers-gulo setup kora holo */
+#stars, #stars2, #stars3 {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    position: absolute; /* .stars-container-er modhye position kora */
+    /* Tarader color white set kora holo */
+    box-shadow: 0 0 #FFF;
+}
+
+/* Animation keyframes: Taragulo niche theke upore dhire dhire move korbe */
+/* Niche theke shuru hoye upore giye abar niche ashbe */
+@keyframes animStar {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(-2000px); /* Pray 2000px upore move korbe */
+    }
+}
+
+/* Choto tarader jonno */
+#stars {
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 150s linear infinite; /* Shobcheye dhire (150 seconds) */
+}
+
+/* Majhari tarader jonno (astar beshi dhire hobe, alada parallax effect-er jonno) */
+#stars2 {
+    width: 2px; /* Ektu boro size */
+    height: 2px;
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 100s linear infinite; /* Majhari goti (100 seconds) */
+}
+
+/* Boro tarader jonno (abar beshi dhire) */
+#stars3 {
+    width: 3px; /* Shobcheye boro size */
+    height: 3px;
+    /* JavaScript diye toiri box-shadow ekhane apply hobe */
+    animation: animStar 50s linear infinite; /* Shobcheye druto (50 seconds) */
+}
+
+/* Extra tarader effect-er jonno pseudo-element use kora holo */
+/* Ei gulo tarader opore du'bar overlay kore, jate beshi tara dekha jay */
+#stars::after, #stars2::after, #stars3::after {
+    content: "";
+    position: absolute;
+    top: 2000px; /* Jate animation-er shuruteo tara dekha jay */
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    /* Tarader shadow gulo nirdisto layer theke pabe */
+    box-shadow: inherit;
+}
+
+#stars2::after {
+    width: 2px;
+    height: 2px;
+}
+
+#stars3::after {
+    width: 3px;
+    height: 3px;
 }

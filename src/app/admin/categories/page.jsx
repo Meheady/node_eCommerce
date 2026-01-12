@@ -107,7 +107,7 @@ export default function CategoriesPage() {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>Image</th>
+            {/*<th>Image</th>*/}
             <th>Name</th>
             <th>Actions</th>
           </tr>
@@ -115,13 +115,16 @@ export default function CategoriesPage() {
         <tbody>
           {categories.map((category) => (
             <tr key={category.id}>
-              <td>
-                <Image src={category.image} alt={category.name} width={50} height={50} rounded />
-              </td>
+              {/*<td>*/}
+              {/*  <Image src={category.image} alt={category.name} width={50} height={50} rounded />*/}
+              {/*</td>*/}
               <td>{category.name}</td>
               <td>
                 <Button variant="warning" onClick={() => openModal(category)} className="me-2">Edit</Button>
-                <Button variant="danger" onClick={() => handleDelete(category.id)}>Delete</Button>
+                <Button variant="danger" onClick={() => window.confirm("Are you sure?") && handleDelete(category.id)}>
+                  Delete
+                </Button>
+
               </td>
             </tr>
           ))}
@@ -147,7 +150,7 @@ export default function CategoriesPage() {
                   placeholder="Enter category name"
                 />
               </Form.Group>
-              <Form.Group className="mt-3">
+              <Form.Group className="mt-3 d-none">
                 <Form.Label>Image</Form.Label>
                 <Form.Control
                   type="file"
