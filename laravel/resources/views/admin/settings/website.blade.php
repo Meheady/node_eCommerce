@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-12xl mx-auto sm:px-12 lg:px-12">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-2xl font-bold mb-6">Manage Website Settings</h3>
@@ -19,7 +19,7 @@
 
                     <form action="{{ route('admin.settings.website.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        
+
                         <div class="mb-4">
                             <label for="site_name" class="block text-gray-700 text-sm font-bold mb-2">Site Name:</label>
                             <input type="text" name="site_name" id="site_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ $settings['site_name'] ?? '' }}">

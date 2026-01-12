@@ -29,22 +29,24 @@
             @include('layouts.sidebar')
         </aside>
 
-        <div class="flex-grow">
+        <div class="flex-grow flex flex-col h-screen">
             @include('layouts.navigation')
 
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+            <div class="flex-grow overflow-y-auto p-6">
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white shadow mb-6">
+                        <div class="py-6 px-4 sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endif
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+                <!-- Page Content -->
+                <main>
+                    {{ $slot }}
+                </main>
+            </div>
         </div>
     </div>
 </body>
