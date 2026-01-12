@@ -21,6 +21,9 @@
             transition: width 0.3s ease-in-out;
         }
     </style>
+    <meta name="theme-color" content="#6777ef"/>
+    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
 </head>
 <body class="font-sans antialiased" x-data="{ sidebarOpen: true }">
     <div class="flex min-h-screen bg-gray-100">
@@ -49,5 +52,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('/js/pwa.js') }}"></script>
 </body>
 </html>

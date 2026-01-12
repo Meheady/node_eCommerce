@@ -1,61 +1,76 @@
-const preLoad = function () {
-    return caches.open("offline").then(function (cache) {
-        // caching index and important routes
-        return cache.addAll(filesToCache);
-    });
-};
-
-self.addEventListener("install", function (event) {
-    event.waitUntil(preLoad());
-});
-
-const filesToCache = [
+const CACHE_NAME = 'ecommerce-admin-cache-v1';
+const STATIC_ASSETS = [
     '/',
-    '/offline.html'
+    '/offline.html',
+    '/css/app.css',
+    '/js/app.js',
+    '/js/pwa.js',
+    '/logo.png',
+    '/pwa-icon-192x192.png',
+    '/pwa-icon-512x512.png',
+    'https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
 ];
 
-const checkResponse = function (request) {
-    return new Promise(function (fulfill, reject) {
-        fetch(request).then(function (response) {
-            if (response.status !== 404) {
-                fulfill(response);
-            } else {
-                reject();
-            }
-        }, reject);
-    });
-};
+self.addEventListener('install', event => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then(cache => {
+                console.log('Opened cache');
+                return cache.addAll(STATIC_ASSETS);
+            })
+    );
+});
 
-const addToCache = function (request) {
-    // Only cache http(s) requests
-    if (!request.url.startsWith('http')) {
-        return Promise.resolve();
+self.addEventListener('activate', event => {
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        })
+    );
+});
+
+self.addEventListener('fetch', event => {
+    // Cache-first for static assets
+    if (STATIC_ASSETS.some(asset => event.request.url.includes(asset))) {
+        event.respondWith(
+            caches.match(event.request)
+                .then(response => {
+                    return response || fetch(event.request);
+                })
+        );
+        return;
     }
-    return caches.open("offline").then(function (cache) {
-        return fetch(request).then(function (response) {
-            return cache.put(request, response);
-        });
-    });
-};
 
+    // Network-first for other requests
+    event.respondWith(
+        fetch(event.request)
+            .then(response => {
+                // Check if we received a valid response
+                if (!response || response.status !== 200 || response.type !== 'basic') {
+                    return response;
+                }
 
-const returnFromCache = function (request) {
-    return caches.open("offline").then(function (cache) {
-        return cache.match(request).then(function (matching) {
-            if (!matching || matching.status === 404) {
-                return cache.match("offline.html");
-            } else {
-                return matching;
-            }
-        });
-    });
-};
+                const responseToCache = response.clone();
 
-self.addEventListener("fetch", function (event) {
-    event.respondWith(checkResponse(event.request).catch(function () {
-        return returnFromCache(event.request);
-    }));
-    if(!event.request.url.startsWith('http')){
-        event.waitUntil(addToCache(event.request));
-    }
+                caches.open(CACHE_NAME)
+                    .then(cache => {
+                        cache.put(event.request, responseToCache);
+                    });
+
+                return response;
+            })
+            .catch(() => {
+                return caches.match(event.request)
+                    .then(response => {
+                        return response || caches.match('/offline.html');
+                    });
+            })
+    );
 });
