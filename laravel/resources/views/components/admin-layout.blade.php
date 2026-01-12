@@ -12,30 +12,24 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
-        .admin-layout {
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            min-height: 100vh;
-        }
-        .content {
-            flex-grow: 1;
+        .transition-width {
+            transition: width 0.3s ease-in-out;
         }
     </style>
 </head>
-<body class="font-sans antialiased">
-    <div class="admin-layout bg-gray-100">
+<body class="font-sans antialiased" x-data="{ sidebarOpen: true }">
+    <div class="flex min-h-screen bg-gray-100">
         <!-- Sidebar -->
-        <aside class="sidebar bg-gray-800 text-white">
+        <aside :class="{ 'w-64': sidebarOpen, 'w-20': !sidebarOpen }" class="bg-gray-800 text-white flex-shrink-0 transition-width overflow-x-hidden">
             @include('layouts.sidebar')
         </aside>
 
-        <div class="content">
+        <div class="flex-grow">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
